@@ -1,0 +1,40 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+group = 'com.yinheli.tool'
+version = '1.0.0'
+
+targetCompatibility = '1.6'
+sourceCompatibility = '1.6'
+
+idea {
+    module {
+        downloadSources = true
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.10'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task createDirs() {
+   sourceSets*.java.srcDirs*.each { it.mkdirs() }
+   sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
+
+task libs(type: Sync) {
+    from configurations.runtime
+    into "$buildDir/lib"
+}
